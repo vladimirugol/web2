@@ -1,0 +1,233 @@
+
+.main-container {
+    width: 95%;
+    height: max-content;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.content-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+}
+
+.left-column, .right-column {
+    flex: 1;
+    min-width: 320px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.graph-container, .results-container, .data-form {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.graph-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#graph-canvas {
+    border: 1px solid #ccc;
+}
+
+.results-container h2 {
+    margin-top: 0;
+    text-align: center;
+    color: black;
+}
+.results-container {
+    display: flex;
+    flex-direction: column;
+    height: 600px;
+}
+
+.results-container h2 {
+    margin-top: 0;
+    text-align: center;
+    color: black;
+    margin-bottom: 15px;
+}
+
+.results-table-container {
+    flex: 1;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+#results-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#results-table th, #results-table td {
+    border: 1px solid #ddd;
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+#results-table th {
+    background-color: white;
+    color: black;
+    font-weight: bold;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.results-table-container::-webkit-scrollbar {
+    width: 8px;
+}
+#results-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+#data-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label, .form-group p {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: black;
+}
+
+.form-group input[type="text"] {
+    width: 95%;
+    padding: 10px;
+    border: 3px solid #e50074;
+    border-radius: 4px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+.form-group input[type="text"]:focus {
+    border-color: #4a6a8a;
+    outline: none;
+}
+
+.radio-buttons, .checkboxes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+.radio-buttons span,
+.checkboxes span {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 15px;
+}
+.radio-buttons input,
+.checkboxes input {
+  vertical-align: middle;
+  margin-top: -7px;
+}
+.form-group-button {
+    box-sizing: border-box;
+    width: 100%;
+    height: 200px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    position: relative;
+    display: flex;
+    align-items: center;
+    top:10px;
+}
+#theme {
+    cursor: pointer;
+    margin:10px, 10px;
+    max-width: max-content;
+    padding: 12px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    font-size: 16px;
+    border: 2px solid #e50074;
+}
+#submit-button {
+    left: 45%;
+    position: absolute;
+    width: 150px;
+    box-sizing: border-box;
+    padding: 12px;
+    letter-spacing: 1px;
+    background-color: var(--btn-bc);
+    border: var(--btn-b);
+    color: var(--btn-c);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, top 0.5 linear, left 0.5 linear;
+}
+
+#submit-button:hover {
+    background-color: var(--btn-bch);
+    border: var(--btn-bh);
+    color: var(--btn-ch);
+}
+
+#error-message {
+    color: red;
+    font-weight: bold;
+    min-height: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.default {
+    --btn-b: 3px solid #e50074;
+    --btn-bc: white;
+    --btn-c: black;
+    --btn-bch: #e50074;
+    --btn-bh: 2px solid #e50074;
+    --btn-ch: white;
+}
+
+.blue {
+    --btn-b: 3px solid #0039e5;
+    --btn-bc: white;
+    --btn-c: black;
+    --btn-bch: #0039e5;
+    --btn-bh: 2px solid #0039e5;
+    --btn-ch: white;
+}
+.red {
+    --btn-b: 3px solid #e50000;
+    --btn-bc: white;
+    --btn-c: black;
+    --btn-bch: #e50000;
+    --btn-bh: 2px solid #e50000;
+    --btn-ch: white;
+}
+.purple {
+    --btn-b: 3px solid #a000e5;
+    --btn-bc: white;
+    --btn-c: black;
+    --btn-bch: #a000e5;
+    --btn-bh: 2px solid #a000e5;
+    --btn-ch: white;
+}
+.orange {
+    --btn-b: 3px solid #e57a00;
+    --btn-bc: white;
+    --btn-c: black;
+    --btn-bch: #e57a00;
+    --btn-bh: 2px solid #e57a00;
+    --btn-ch: white;
+}
