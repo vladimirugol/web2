@@ -1,5 +1,3 @@
-
-
 const graphDrawer = {
     canvas: null,
     ctx: null,
@@ -56,7 +54,6 @@ const graphDrawer = {
             const scale = this.R_PIXELS / currentR;
             const pointX = this.centerX + parseFloat(item.x) * scale;
             const pointY = this.centerY - parseFloat(item.y) * scale;
-
             this.ctx.fillStyle = isHit ? '#28a745' : '#dc3545';
             this.ctx.beginPath();
             this.ctx.arc(pointX, pointY, 4, 0, 2 * Math.PI);
@@ -67,21 +64,23 @@ const graphDrawer = {
     _drawArea(rValue) {
         const r_px = this.R_PIXELS;
         const r_half_px = r_px / 2;
-
         this.ctx.fillStyle = '#e50074';
         this.ctx.beginPath();
-        this.ctx.fillRect(this.centerX - r_half_px, this.centerY - r_px, r_half_px, r_px);
+        this.ctx.rect(this.centerX - r_px, this.centerY - r_px, r_px, r_px);
+        this.ctx.fill();
+        this.ctx.beginPath();
         this.ctx.moveTo(this.centerX, this.centerY);
-        this.ctx.lineTo(this.centerX + r_half_px, this.centerY);
-        this.ctx.lineTo(this.centerX, this.centerY - r_px);
+        this.ctx.arc(this.centerX, this.centerY, r_half_px, 0, Math.PI / 2, false);
         this.ctx.closePath();
         this.ctx.fill();
         this.ctx.beginPath();
         this.ctx.moveTo(this.centerX, this.centerY);
-        this.ctx.arc(this.centerX, this.centerY, r_half_px, Math.PI/2, Math.PI);
+        this.ctx.lineTo(this.centerX + r_px, this.centerY);
+        this.ctx.lineTo(this.centerX, this.centerY - r_half_px);
         this.ctx.closePath();
         this.ctx.fill();
     },
+
 
     _drawAxes() {
         this.ctx.strokeStyle = 'black';
@@ -104,7 +103,7 @@ const graphDrawer = {
         const pixelSteps = [-this.R_PIXELS, -this.R_PIXELS / 2, this.R_PIXELS / 2, this.R_PIXELS];
         labels.forEach((label, i) => {
             const step = pixelSteps[i];
-            this.ctx.fillText(label, this.centerX + step - 5, this.centerY + 15);
+            this.ctx.fillText(label, this.centerX + step - 10, this.centerY + 15);
             this.ctx.beginPath();
             this.ctx.moveTo(this.centerX + step, this.centerY - 3);
             this.ctx.lineTo(this.centerX + step, this.centerY + 3);
@@ -115,7 +114,7 @@ const graphDrawer = {
             this.ctx.lineTo(this.centerX + 3, this.centerY - step);
             this.ctx.stroke();
         });
-        this.ctx.fillText("X", this.width - 15, this.centerY + 15);
-        this.ctx.fillText("Y", this.centerX - 15, 15);
+        this.ctx.fillText("X", this.width - 15, this.centerY - 10);
+        this.ctx.fillText("Y", this.centerX + 10, 15);
     }
 };

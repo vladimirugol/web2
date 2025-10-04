@@ -1,34 +1,31 @@
-
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="https://jakarta.ee/taglibs/core" %>
-
+<%@ page import="java.util.List" %>
+<%@ page import="com.vladimirugol.server.logic.model.ValidResponse" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/header.css">
-    <link rel="stylesheet" href="css/index.css">
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="static/css/header.css">
+    <link rel="stylesheet" href="static/css/index.css">
+    <link rel="stylesheet" href="static/css/main.css">
 
     <title>Web2</title>
-    <link rel="icon" href="images/utka1.png">
+    <link rel="icon" href="static/imajes/utka1.png">
     <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;700&display=swap" rel="stylesheet">
-
 </head>
 <body>
     <header id="header-container" class="header-container">
-
-            <div class="header-info">
-                <div class="utka-logo">
-                <a href="https://se.ifmo.ru/"><img src="images/utka1.png" alt="vt-duck" width="100px"></a>
+        <div class="header-info">
+            <div class="utka-logo">
+                <a href="https://se.ifmo.ru/"><img src="static/imajes/utka1.png" alt="vt-duck" width="100px"></a>
             </div>
-                <h1 class="student-name">Radchenko Alina Alexandrovna</h1>
-                <div class="meta">
-                    <span class="group">Group: <strong>P3207</strong></span>
-                    <span class="variant">Variant: <strong>№ 472395</strong></span>
-                </div>
+            <h1 class="student-name">Radchenko Alina Alexandrovna</h1>
+            <div class="meta">
+                <span class="group">Group: <strong>P3207</strong></span>
+                <span class="variant">Variant: <strong>№ 472395</strong></span>
             </div>
+        </div>
     </header>
     <main class="main-container">
         <button id="theme">Switch color</button>
@@ -38,23 +35,24 @@
                     <canvas id="graph-canvas" width="300" height="300"></canvas>
                 </div>
                 <form id="data-form" class="data-form" method="POST" onsubmit="return false;">
-                    <div class="form-group">
-                        <label for="x-value">Change X:</label>
-                        <input type="text" id="x-value" name="x" placeholder="Enter a number from -5 to 5" required>
-                    </div>
-                    <div class="form-group y-group">
-                        <p>Change Y:</p>
-                        <div class="radio-buttons">
-                             <span><input type="radio" name="y" value="-5" id="y-m5"><label for="y-m5">-5</label></span>
-                             <span><input type="radio" name="y" value="-4" id="y-m4"><label for="y-m4">-4</label></span>
-                             <span><input type="radio" name="y" value="-3" id="y-m3"><label for="y-m3">-3</label></span>
-                             <span><input type="radio" name="y" value="-2" id="y-m2"><label for="y-m2">-2</label></span>
-                             <span><input type="radio" name="y" value="-1" id="y-m1"><label for="y-m1">-1</label></span>
-                             <span><input type="radio" name="y" value="0" id="y-0" checked><label for="y-0">0</label></span>
-                             <span><input type="radio" name="y" value="1" id="y-1"><label for="y-1">1</label></span>
-                             <span><input type="radio" name="y" value="2" id="y-2"><label for="y-2">2</label></span>
-                             <span><input type="radio" name="y" value="3" id="y-3"><label for="y-3">3</label></span>
+                    <div class="form-group x-group">
+                        <p>Change X:</p>
+                        <div class="buttons">
+                            <button type="button" class="x-button" value="-4">-4</button>
+                            <button type="button" class="x-button" value="-3">-3</button>
+                            <button type="button" class="x-button" value="-2">-2</button>
+                            <button type="button" class="x-button" value="-1">-1</button>
+                            <button type="button" class="x-button" value="0">0</button>
+                            <button type="button" class="x-button" value="1">1</button>
+                            <button type="button" class="x-button" value="2">2</button>
+                            <button type="button" class="x-button" value="3">3</button>
+                            <button type="button" class="x-button" value="4">4</button>
                         </div>
+                        <input type="hidden" id="x-value" name="x">
+                    </div>
+                    <div class="form-group">
+                        <label for="y-value">Change Y:</label>
+                        <input type="text" id="y-value" name="y" placeholder="Enter a number from -3 to 3" required>
                     </div>
                     <div class="form-group r-group">
                          <p>Change R:</p>
@@ -87,6 +85,23 @@
                             </tr>
                         </thead>
                         <tbody id="results-body">
+                        <%
+                             List<ValidResponse> results = (List<ValidResponse>) session.getAttribute("results");
+                             if (results != null) {
+                                  for (ValidResponse res : results) {
+                        %>
+                            <tr>
+                                  <td><%= res.getX() %></td>
+                                  <td><%= res.getY() %></td>
+                                  <td><%= res.getR() %></td>
+                                  <td><%= res.isHit() ? "true" : "false" %></td>
+                                  <td><%= res.getCurrentTime() %></td>
+                                  <td><%= res.getExecMs() %></td>
+                            </tr>
+                        <%
+                                }
+                            }
+                        %>
                         </tbody>
                     </table>
                     </div>
@@ -97,7 +112,7 @@
             <button type="submit" id="submit-button">Send</button>
         </div>
     </main>
-    <script src="js/canvas.js"></script>
-    <script src="js/main.js"></script>
+    <script src="static/js/canvas.js"></script>
+    <script src="static/js/main.js"></script>
 </body>
 </html>

@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
 import java.io.IOException;
-@WebServlet(name = "ControllerServlet", value = "/controller")
+@WebServlet(name = "ControllerServlet", urlPatterns = {"/controller", "/controller/"})
 public class ControllerServlet extends HttpServlet {
     private final Gson gson = new Gson();
     private void process(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{

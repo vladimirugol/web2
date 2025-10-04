@@ -1,4 +1,3 @@
-
 .main-container {
     width: 95%;
     height: max-content;
@@ -39,11 +38,6 @@
     border: 1px solid #ccc;
 }
 
-.results-container h2 {
-    margin-top: 0;
-    text-align: center;
-    color: black;
-}
 .results-container {
     display: flex;
     flex-direction: column;
@@ -86,9 +80,6 @@
     z-index: 10;
 }
 
-.results-table-container::-webkit-scrollbar {
-    width: 8px;
-}
 #results-table tbody tr:nth-child(even) {
     background-color: #f9f9f9;
 }
@@ -123,22 +114,51 @@
     outline: none;
 }
 
-.radio-buttons, .checkboxes {
+.buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.x-button {
+    padding: 8px 12px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+}
+
+.x-button:hover {
+    background-color: #e0e0e0;
+    border-color: #a0a0a0;
+}
+
+.x-button.active {
+    background-color: #e50074;
+    color: white;
+    border-color: #e50074;
+}
+
+.checkboxes {
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
 }
-.radio-buttons span,
+
 .checkboxes span {
   display: inline-flex;
   align-items: center;
   margin-right: 15px;
 }
-.radio-buttons input,
+
 .checkboxes input {
   vertical-align: middle;
   margin-top: -7px;
 }
+
 .form-group-button {
     box-sizing: border-box;
     width: 100%;
@@ -147,11 +167,12 @@
     position: relative;
     display: flex;
     align-items: center;
-    top:10px;
+    top: 10px;
 }
+
 #theme {
     cursor: pointer;
-    margin:10px, 10px;
+    margin: 10px;
     max-width: max-content;
     padding: 12px;
     box-sizing: border-box;
@@ -159,6 +180,7 @@
     font-size: 16px;
     border: 2px solid #e50074;
 }
+
 #submit-button {
     left: 45%;
     position: absolute;
@@ -173,7 +195,7 @@
     cursor: pointer;
     font-size: 16px;
     font-weight: bold;
-    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, top 0.5 linear, left 0.5 linear;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, top 0.5s linear, left 0.5s linear;
 }
 
 #submit-button:hover {
@@ -207,6 +229,7 @@
     --btn-bh: 2px solid #0039e5;
     --btn-ch: white;
 }
+
 .red {
     --btn-b: 3px solid #e50000;
     --btn-bc: white;
@@ -215,6 +238,7 @@
     --btn-bh: 2px solid #e50000;
     --btn-ch: white;
 }
+
 .purple {
     --btn-b: 3px solid #a000e5;
     --btn-bc: white;
@@ -223,6 +247,7 @@
     --btn-bh: 2px solid #a000e5;
     --btn-ch: white;
 }
+
 .orange {
     --btn-b: 3px solid #e57a00;
     --btn-bc: white;

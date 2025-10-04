@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'war'
 }
 
 group = 'org.example'
@@ -10,11 +11,12 @@ repositories {
 }
 
 dependencies {
-    implementation("org.projectlombok:lombok:1.18.34")
-    compileOnly("org.projectlombok:lombok")
+    compileOnly 'org.projectlombok:lombok:1.18.32'
+    annotationProcessor 'org.projectlombok:lombok:1.18.32'
     implementation 'commons-io:commons-io:2.11.0'
     implementation 'com.google.code.gson:gson:2.10.1'
-    compileOnly("jakarta.servlet:jakarta.servlet-api:6.1.0")
+    implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:3.0.0'
+    implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.1'
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 }
@@ -22,3 +24,20 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+def tomcatDir = 'users/Uzbek/Desktop/tomcat/apache-tomcat-10.1.46'
+
+task deployToTomcat(type: Copy) {
+    doFirst {
+        delete "${tomcatDir}/webapps/${war.archiveFileName.get()}"
+        delete "${tomcatDir}/webapps/${rootProject.name}"
+    }
+    from war.archiveFile
+
+    into "${tomcatDir}/webapps"
+
+    doLast {
+        println ">>> Deployed ${war.archiveFileName.get()} to Tomcat <<<"
+    }
+}
+
+deployToTomcat.dependsOn war
