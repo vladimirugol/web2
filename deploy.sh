@@ -1,0 +1,1 @@
+./target/server/bin/standalone.sh -Djboss.http.port=1888 -Djboss.management.http.port=9999

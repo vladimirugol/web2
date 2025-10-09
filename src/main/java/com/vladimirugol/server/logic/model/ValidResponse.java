@@ -10,7 +10,7 @@ public class ValidResponse {
     private BigDecimal x;
     private BigDecimal y;
     private BigDecimal r;
-    private boolean hit;
+    private boolean isHit;
     private String currentTime;
     private long execMs;
 }

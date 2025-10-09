@@ -112,7 +112,18 @@
             <button type="submit" id="submit-button">Send</button>
         </div>
     </main>
-    <script src="static/js/canvas.js"></script>
-    <script src="static/js/main.js"></script>
+    <script type="module" src="static/js/util/util.js"></script>
+
+    <script type="module" src="static/js/form/validation.js"></script>
+    <script type="module" src="static/js/form/history.js"></script>
+    <script type="module" src="static/js/form/form.js"></script>
+
+    <script type="module" src="static/js/plot/canvas.js"></script>
+    <script type="module" src="static/js/plot/graphHandler.js"></script>
+    <script type="module" src="static/js/plot/interaction.js"></script>
+
+    <script type="module" src="static/js/theme/theme.js"></script>
+
+    <script type="module" src="static/js/main.js"></script>
 </body>
 </html>
