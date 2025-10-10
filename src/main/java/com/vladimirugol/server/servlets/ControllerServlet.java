@@ -30,7 +30,6 @@ public class ControllerServlet extends HttpServlet {
             log("Invalid JSON syntax received: " + jsonPayload, e);
         }
 
-        RequestDispatcher disp;
         if (isRequestValid) {
             req.setAttribute("pointRequest", pointRequest);
             req.getRequestDispatcher("/areaCheck").forward(req, resp);

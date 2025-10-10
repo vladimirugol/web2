@@ -23,23 +23,19 @@ public class AreaCheckServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         processRequest(req, resp);
     }
-
     private void processRequest(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         PointRequest pointRequest = (PointRequest) req.getAttribute("pointRequest");
-
         if (pointRequest == null) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             resp.getWriter().write("No point data received");
             return;
         }
-
         HttpSession session = req.getSession(true);
         DataService dataService = (DataService) session.getAttribute("dataService");
         if (dataService == null) {
             dataService = new DataService();
             session.setAttribute("dataService", dataService);
         }
-
         List<ValidResponse> resultsForThisRequest = new ArrayList<>();
 
         for (BigDecimal rValue : pointRequest.getR()) {
