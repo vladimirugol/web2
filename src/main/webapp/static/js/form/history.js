@@ -1,49 +1,43 @@
 import { getSelectedR } from '../util/util.js';
-import { drawInitialGraph } from '../plot/graphHandler.js';
-
+import { drawInitialGraph} from '../plot/graphHandler.js'
 const resultsBody = document.getElementById('results-body');
-
-export function tableToHistory() {
-    const history = [];
-    const rows = document.querySelectorAll('#results-body tr');
-    rows.forEach(row => {
-        const cells = row.querySelectorAll('td');
-        if (cells.length >= 6) {
-            const hitStatusText = cells[3].textContent.trim();
-            const isHit = (hitStatusText === '✓' || hitStatusText.toLowerCase() === 'true');
-            history.push({
-                x: cells[0].textContent,
-                y: cells[1].textContent,
-                r: cells[2].textContent,
-                isHit,
-                currentTime: cells[4].textContent,
-                execMs: cells[5].textContent
-            });
-        }
-    });
-    return history;
-}
 
 export function updateTableFromHistory(history) {
     resultsBody.innerHTML = '';
-    history.forEach(item => {
+
+    if (!history || history.length === 0) {
+        resultsBody.innerHTML = `<tr><td colspan="6" style="text-align: center;">No results yet. Submit a point to see results here.</td></tr>`;
+        return;
+    }
+    history.slice().reverse().forEach(item => {
         const row = document.createElement('tr');
-        ['x', 'y', 'r', 'isHit', 'currentTime', 'execMs'].forEach(key => {
-            const td = document.createElement('td');
-            td.textContent = (key === 'isHit') ? (item[key] ? 'true' : 'false') : item[key];
-            row.appendChild(td);
-        });
-        resultsBody.prepend(row);
+
+
+        row.innerHTML = `
+            <td>${item.x}</td>
+            <td>${item.y}</td>
+            <td>${item.r}</td>
+            <td>${item.hit ? 'true' : 'false'}</td>
+            <td>${item.currentTime}</td>
+            <td>${item.execMs} ns</td>
+        `;
+        resultsBody.appendChild(row);
     });
 }
 
 export function loadHistoryAndDraw() {
-    let history = JSON.parse(sessionStorage.getItem('resultsHistory')) || [];
-    if (history.length === 0) {
-        history = tableToHistory();
-        sessionStorage.setItem('resultsHistory', JSON.stringify(history));
-    }
-    updateTableFromHistory(history);
-    const currentR = getSelectedR();
-    drawInitialGraph(history, currentR);
+   let rawHistory = initialResults;
+       const cleanedHistory = rawHistory.map(item => ({
+           x: parseFloat(item.x),
+           y: parseFloat(item.y),
+           r: parseFloat(item.r),
+           hit: item.hit === true || item.hit === "true" || item.hit === "Yes",
+           currentTime: item.currentTime,
+           execMs: item.execMs
+       }));
+
+       updateTableFromHistory(cleanedHistory);
+
+       const currentR = getSelectedR();
+       drawInitialGraph(cleanedHistory, currentR);
 }

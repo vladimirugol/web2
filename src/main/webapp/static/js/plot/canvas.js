@@ -28,12 +28,12 @@ export const graphDrawer = {
     },
 
 
-    drawPoint(x, y, r, isHit) {
+    drawPoint(x, y, r, hit) {
         const scale = this.R_PIXELS / r;
         const pointX = this.centerX + x * scale;
         const pointY = this.centerY - y * scale;
 
-        this.ctx.fillStyle = isHit ? '#28a745' : '#dc3545';
+        this.ctx.fillStyle = hit ? '#28a745' : '#dc3545';
         this.ctx.beginPath();
         this.ctx.arc(pointX, pointY, 4, 0, 2 * Math.PI);
         this.ctx.fill();
@@ -41,8 +41,7 @@ export const graphDrawer = {
 
     redrawAllPoints(history) {
         history.forEach(item => {
-            const isHit = item.isHit;
-            this.drawPoint(parseFloat(item.x), parseFloat(item.y), parseFloat(item.r), isHit);
+            this.drawPoint(parseFloat(item.x), parseFloat(item.y), parseFloat(item.r), item.hit);
         });
     },
 
@@ -50,11 +49,10 @@ export const graphDrawer = {
         if (!currentR) return;
 
         history.forEach(item => {
-            const isHit = item.isHit;
             const scale = this.R_PIXELS / currentR;
             const pointX = this.centerX + parseFloat(item.x) * scale;
             const pointY = this.centerY - parseFloat(item.y) * scale;
-            this.ctx.fillStyle = isHit ? '#28a745' : '#dc3545';
+            this.ctx.fillStyle = item.hit ? '#28a745' : '#dc3545';
             this.ctx.beginPath();
             this.ctx.arc(pointX, pointY, 4, 0, 2 * Math.PI);
             this.ctx.fill();

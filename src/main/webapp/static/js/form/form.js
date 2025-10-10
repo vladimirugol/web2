@@ -1,5 +1,4 @@
 import { getSelectedR } from '../util/util.js';
-import { tableToHistory } from './history.js';
 import { redrawGraph } from '../plot/graphHandler.js';
 
 const xHiddenInput = document.getElementById('x-value');
@@ -28,32 +27,44 @@ export function setupRCheckboxes() {
 }
 
 export async function sendData() {
-    const x = xHiddenInput.value;
+    const xHiddenInput = document.getElementById('x-value');
     const yInput = document.getElementById('y-value');
+    const errorMessage = document.getElementById('error-message');
+
+    const x = xHiddenInput.value;
     const y = yInput.value.trim().replace(',', '.');
     const selectedR = getSelectedR();
 
-    const requests = selectedR.map(r => {
-        return fetch('controller?format=params', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ x, y, r })
-        }).then(resp => {
-            if (!resp.ok) throw new Error(`HTTP error! ${resp.status}`);
-            return resp.text();
-        });
-    });
+    if (!x || !y || selectedR.length === 0) {
+        errorMessage.textContent = 'Please select X, enter Y, and choose at least one R.';
+        return;
+    }
+    errorMessage.textContent = '';
+
+    const dataToSend = {
+        x: x,
+        y: y,
+        r: selectedR
+    };
 
     try {
-        const htmlRows = await Promise.all(requests);
-        htmlRows.forEach(html => resultsBody.insertAdjacentHTML('afterbegin', html));
+        const response = await fetch('controller', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(dataToSend)
+        });
 
-        const history = tableToHistory();
-        sessionStorage.setItem('resultsHistory', JSON.stringify(history));
-        redrawGraph(getSelectedR());
-
+        if (response.ok) {
+            window.location.href = response.url;
+        } else {
+            const errorText = await response.text();
+            console.error('Server error:', errorText);
+            errorMessage.textContent = `Server error: ${errorText}`;
+        }
     } catch (err) {
-        console.error('Error sending data:', err);
-        errorMessage.textContent = 'Connection Error. One or more requests failed.';
+        console.error('Connection error:', err);
+        errorMessage.textContent = 'Connection Error. Could not reach the server.';
     }
 }

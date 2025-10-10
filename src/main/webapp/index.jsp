@@ -1,6 +1,20 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
-<%@ page import="java.util.List" %>
 <%@ page import="com.vladimirugol.server.logic.model.ValidResponse" %>
+<%@ page import="com.vladimirugol.server.logic.util.DataService" %>
+<%@ page import="java.util.List" %>
+<%@ page import="com.google.gson.Gson" %>
+
+<%
+    DataService dataService = (DataService) session.getAttribute("dataService");
+    List<ValidResponse> allResults = null;
+    if (dataService != null) {
+        allResults = dataService.getResults();
+    }
+
+    Gson gson = new Gson();
+    String resultsJson = (allResults != null) ? gson.toJson(allResults) : "[]";
+%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,7 +23,6 @@
     <link rel="stylesheet" href="static/css/header.css">
     <link rel="stylesheet" href="static/css/index.css">
     <link rel="stylesheet" href="static/css/main.css">
-
     <title>Web2</title>
     <link rel="icon" href="static/imajes/utka1.png">
     <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;700&display=swap" rel="stylesheet">
@@ -27,6 +40,7 @@
             </div>
         </div>
     </header>
+
     <main class="main-container">
         <button id="theme">Switch color</button>
         <div class="content-wrapper">
@@ -65,45 +79,28 @@
                         </div>
                     </div>
                     <div id="error-message" class="error-message"></div>
-
                 </form>
             </div>
 
             <div class="right-column">
                 <div class="results-container">
-                    <h2>Results</h2>
+                    <h2>Results History</h2>
                     <div class="results-table-container">
                         <table id="results-table">
-                        <thead>
-                            <tr>
-                                <th>X</th>
-                                <th>Y</th>
-                                <th>R</th>
-                                <th>Result</th>
-                                <th>Current time</th>
-                                <th>Execution time</th>
-                            </tr>
-                        </thead>
-                        <tbody id="results-body">
-                        <%
-                             List<ValidResponse> results = (List<ValidResponse>) session.getAttribute("results");
-                             if (results != null) {
-                                  for (ValidResponse res : results) {
-                        %>
-                            <tr>
-                                  <td><%= res.getX() %></td>
-                                  <td><%= res.getY() %></td>
-                                  <td><%= res.getR() %></td>
-                                  <td><%= res.isHit() ? "true" : "false" %></td>
-                                  <td><%= res.getCurrentTime() %></td>
-                                  <td><%= res.getExecMs() %></td>
-                            </tr>
-                        <%
-                                }
-                            }
-                        %>
-                        </tbody>
-                    </table>
+                            <thead>
+                                <tr>
+                                    <th>X</th>
+                                    <th>Y</th>
+                                    <th>R</th>
+                                    <th>Result</th>
+                                    <th>Current time</th>
+                                    <th>Execution time</th>
+                                </tr>
+                            </thead>
+                            <tbody id="results-body">
+
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -112,18 +109,19 @@
             <button type="submit" id="submit-button">Send</button>
         </div>
     </main>
-    <script type="module" src="static/js/util/util.js"></script>
 
+    <script>
+        const initialResults = <%= resultsJson %>;
+    </script>
+
+    <script type="module" src="static/js/util/util.js"></script>
     <script type="module" src="static/js/form/validation.js"></script>
     <script type="module" src="static/js/form/history.js"></script>
     <script type="module" src="static/js/form/form.js"></script>
-
     <script type="module" src="static/js/plot/canvas.js"></script>
     <script type="module" src="static/js/plot/graphHandler.js"></script>
     <script type="module" src="static/js/plot/interaction.js"></script>
-
     <script type="module" src="static/js/theme/theme.js"></script>
-
     <script type="module" src="static/js/main.js"></script>
 </body>
 </html>

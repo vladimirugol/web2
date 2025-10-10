@@ -1,60 +1,63 @@
 package com.vladimirugol.server.servlets.area;
 
 import com.vladimirugol.server.logic.model.PointData;
+import com.vladimirugol.server.logic.model.PointRequest;
 import com.vladimirugol.server.logic.model.ValidResponse;
 import com.vladimirugol.server.logic.util.DataService;
 import com.vladimirugol.server.logic.util.ValidationService;
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.*;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @WebServlet(name = "AreaCheckServlet", value = "/areaCheck")
 public class AreaCheckServlet extends HttpServlet {
-    DataService dataService = new DataService();
-    ValidationService validationService = new ValidationService();
-    private void process(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
-        final String format = Optional.ofNullable(req.getParameter("format")).orElse("full");
-        RequestDispatcher disp;
-        PointData pointData = (PointData) req.getAttribute("parsedPoint");
-        List<String> validationErrors = validationService.validate(pointData);
-        if (validationErrors.isEmpty()) {
-            HttpSession session = req.getSession();
-            List<ValidResponse> results = (List<ValidResponse>) session.getAttribute("results");
-            if (results == null) results = new ArrayList<>();
-            ValidResponse result = dataService.processData(pointData);
-            results.add(result);
-            session.setAttribute("results", results);
-            if ("params".equals(format)) {
-                String htmlResponse = "<tr>" +
-                        "<td>" + result.getX() + "</td>" +
-                        "<td>" + result.getY() + "</td>" +
-                        "<td>" + result.getR() + "</td>" +
-                        "<td>" + result.isHit() + "</td>" +
-                        "<td>" + result.getCurrentTime() + "</td>" +
-                        "<td>" + result.getExecMs() + "</td>" +
-                        "</tr>";
-                resp.setContentType("text/html");
-                resp.getWriter().write(htmlResponse);
-            } else {
-                disp = req.getRequestDispatcher("index.jsp");
-                disp.forward(req, resp);
-            }
-        } else {
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().write(String.join("\n", validationErrors));
-        }
-    }
+
+    private final ValidationService validationService = new ValidationService();
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        process(req, resp);
+        processRequest(req, resp);
+    }
+
+    private void processRequest(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        PointRequest pointRequest = (PointRequest) req.getAttribute("pointRequest");
+
+        if (pointRequest == null) {
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resp.getWriter().write("No point data received");
+            return;
+        }
+
+        HttpSession session = req.getSession(true);
+        DataService dataService = (DataService) session.getAttribute("dataService");
+        if (dataService == null) {
+            dataService = new DataService();
+            session.setAttribute("dataService", dataService);
+        }
+
+        List<ValidResponse> resultsForThisRequest = new ArrayList<>();
+
+        for (BigDecimal rValue : pointRequest.getR()) {
+            PointData pointData = new PointData(pointRequest.getX(), pointRequest.getY(), rValue);
+            List<String> validationErrors = validationService.validate(pointData);
+
+            if (validationErrors.isEmpty()) {
+                ValidResponse result = dataService.processData(pointData);
+                resultsForThisRequest.add(result);
+            }
+        }
+
+        session.setAttribute("dataService", dataService);
+
+        session.setAttribute("latestResults", resultsForThisRequest);
+        String sessionId = session.getId();
+        resp.addCookie(new Cookie("JSESSIONID", sessionId));
+
+        resp.sendRedirect(req.getContextPath() + "/index2.jsp");
     }
 }
