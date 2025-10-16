@@ -4,8 +4,6 @@ import { redrawGraph } from '../plot/graphHandler.js';
 const xHiddenInput = document.getElementById('x-value');
 const xButtons = document.querySelectorAll('.x-button');
 const rCheckboxes = document.querySelectorAll('.r-checkbox');
-const resultsBody = document.getElementById('results-body');
-const errorMessage = document.getElementById('error-message');
 
 export function setupXButtons() {
     xButtons.forEach(button => {

@@ -2,7 +2,6 @@ package com.vladimirugol.server.logic.util;
 
 import com.vladimirugol.server.logic.model.PointData;
 import com.vladimirugol.server.logic.model.ValidResponse;
-import lombok.Data;
 
 import java.io.Serializable;
 import java.time.LocalTime;
@@ -12,7 +11,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static com.vladimirugol.server.logic.util.HitChecker.checkHit;
-@Data
+
 public class DataService implements Serializable {
     private List<ValidResponse> results = new CopyOnWriteArrayList<>();
 

@@ -4,9 +4,8 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.google.gson.Gson" %>
 
-<jsp:useBean id="dataService" class="com.vladimirugol.server.logic.util.DataService.class" scope="session" />
+<jsp:useBean id="dataService" class="com.vladimirugol.server.logic.util.DataService" scope="session" />
 <%
-    DataService dataService = (DataService) session.getAttribute("dataService");
     List<ValidResponse> allResults = null;
     if (dataService != null) {
         allResults = dataService.getResults();
