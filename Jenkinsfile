@@ -21,6 +21,8 @@ pipeline {
         stage('JS linting'){
             steps {
                 echo 'install dependencies'
+                sh 'npm cache clean --force'
+                sh 'rm -rf node_modules'
                 sh 'npm install'
 
                 echo 'check code'
