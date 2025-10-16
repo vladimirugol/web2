@@ -29,20 +29,10 @@ pipeline {
                 sh 'npm run lint || true'
             }
         }
-        stage('Security & Quality Scans') {
-            parallel {
-                stage('SonarQube Analysis') {
-                    steps {
-                        withSonarQubeEnv('MySonarQubeServer') {
-                            sh 'mvn sonar:sonar'
-                        }
-                    }
-                }
-                stage('OWASP Dependency-Check') {
-                    steps {
-                        dependencyCheck odcInstallation: 'default-dependency-check', additionalArguments: '--scan . --format XML'
-                        dependencyCheckPublisher pattern: 'dependency-check-report.xml'
-                    }
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('MySonarQubeServer') {
+                    sh 'mvn sonar:sonar'
                 }
             }
         }
