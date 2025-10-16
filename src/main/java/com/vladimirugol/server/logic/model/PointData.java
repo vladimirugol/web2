@@ -1,6 +1,5 @@
 package com.vladimirugol.server.logic.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.io.Serializable;

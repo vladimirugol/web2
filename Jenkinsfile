@@ -40,7 +40,7 @@ pipeline {
                 }
                 stage('OWASP Dependency-Check') {
                     steps {
-                        dependencyCheckAnalyze datadir: 'dependency-check-data', scanpath: '.'
+                        dependencyCheckAnalyzer installation: 'default-dependency-check', datadir: 'dependency-check-data', scanpath: '.'
                         dependencyCheckPublisher pattern: 'dependency-check-report.xml'
                     }
                 }
