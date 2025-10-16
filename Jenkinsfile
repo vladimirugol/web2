@@ -6,7 +6,7 @@ pipeline {
             nodejs 'node-20'
     }
     stages {
-        stage('Checkout')
+        stage('Checkout'){
             steps{
                 echo 'code from git'
                 checkout scm
